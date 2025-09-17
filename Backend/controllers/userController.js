@@ -37,6 +37,9 @@ const login = async (req, res) => {
         if(!user) {
             return res.status(404).json("User not found");
         }
+        if(user.isdeleted) {
+            return res.status(400).json("User has been deleted");
+        }
         const validPassword = await bcrypt.compare(req.body.password, user.password);
         if(!validPassword) {
             return res.status(400).json("Wrong Password");
@@ -61,9 +64,39 @@ const logout = async (req, res) => {
     }
 };
 
+const delete_user = async (req, res) => {
+    try {
+        // soft delete
+        const user = await User.findById(req.params.id);
+        if(!user) {
+            return res.status(404).json("User not found");
+        }
+        await User.findByIdAndUpdate(req.params.id, { isdeleted: true });
+        res.status(200).json("User has been deleted");
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
+const get_user_detail = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if(!user) {
+            return res.status(404).json("User not found");
+        }
+        if(user.isdeleted) {
+            return res.status(400).json("User has been deleted");
+        }
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
 
 module.exports = {
     registerUser,
     login,
-    logout
+    logout,
+    delete_user,
+    get_user_detail
 }
