@@ -141,6 +141,9 @@ const update_user = async (req, res) => {
         if(user.isdeleted) {
             return res.status(400).json("User has been deleted");
         }
+        if(user.isactive==false) {
+            return res.status(400).json("User is not active");
+        }
         await User.findByIdAndUpdate(req.params.id, req.body);
         res.status(200).json("User has been updated");
     } catch (err) {
