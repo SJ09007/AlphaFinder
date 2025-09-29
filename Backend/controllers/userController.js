@@ -98,6 +98,12 @@ const delete_user = async (req, res) => {
         if(user.isdeleted) {
             return res.status(400).json("User has been deleted");
         }
+        if(user.isactive==false) {
+            return res.status(400).json("User is not active");
+        }
+        if(req.id != req.params.id) {
+            return res.status(400).json("You can only delete your account");
+        }
         await User.findByIdAndUpdate(req.params.id, { isdeleted: true });
         await sendEmail(process.env.SMTP_EMAIL, req.body.email, "User deleted", "User deleted");
         res.status(200).json("User has been deleted");
@@ -143,6 +149,9 @@ const update_user = async (req, res) => {
         }
         if(user.isactive==false) {
             return res.status(400).json("User is not active");
+        }
+         if(req.id != req.params.id) {
+            return res.status(400).json("You can only update your account");
         }
         await User.findByIdAndUpdate(req.params.id, req.body);
         res.status(200).json("User has been updated");
