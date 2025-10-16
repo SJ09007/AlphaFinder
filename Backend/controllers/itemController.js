@@ -3,13 +3,19 @@ const ClaimedItem = require("../models/ClaimsModels");
 
 const createItem = async (req, res) => {
     try {
+                
+        // console.log("req.user:", req);
+
         if (!req.body.title || !req.body.description || !req.body.category || !req.body.status || !req.body.location || !req.body.date) {
             return res.status(400).json("All fields are required");
         }
         // postedby by logged in user
-        current_user = req.user._id;
-        req.body.postedby = current_user;
+        if (!req.user ) {
+            return res.status(401).json({ error: "Unauthorized. No user found in request." });
+        }
         
+        current_user = req.user.id;
+        req.body.postedBy = current_user;
 
         const item = await Item.create(req.body);
         res.status(201).json(item);
