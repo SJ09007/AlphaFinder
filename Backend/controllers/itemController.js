@@ -93,17 +93,22 @@ const update_status = async (req, res) => {
         if (!item) {
             return res.status(404).json("Item not found");
         }
+
         if(item.status == "claimed" || item.status == "reported") {
             return res.status(400).json("Item has already been claimed");
         }
-        if(item.postedby != req.user._id) {
+     
+        if(item.postedBy._id.toString() != req.user.id) {
             return res.status(400).json("You can only update your items");
         }
         // find all persons who have claimed the item
         const claims = await ClaimedItem.find({ item: req.params.id });
-        if(!claims.users.includes(req.body.userid)) {
-            return res.status(400).json("You have not claimed this item");
-        }
+           console.log(item.postedBy._id.toString());
+        console.log(req.user.id);
+const userIdStr = req.user.id; // or req.body.userid if you're using that
+
+
+          console.log(item.status);
 
         if(item.status == "lost"){
             item.status = "reported";
@@ -112,6 +117,7 @@ const update_status = async (req, res) => {
             item.status = "claimed";
             item.claimedBy = req.body.userid;
         }
+        console.log(item.status);
         await item.save();
         res.status(200).json("Item status has been updated");
     } catch (err) {
