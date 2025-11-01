@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "../styles/LoginForm.module.css";
 import PasswordInput from "./PasswordInput";
 
-// Component must now accept onNavigate prop
-const LoginForm = ({ onLoginSuccess, onToggleForm, onNavigate }) => {
+const LoginForm = ({ onToggleForm }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -43,10 +44,13 @@ const LoginForm = ({ onLoginSuccess, onToggleForm, onNavigate }) => {
       const { token, ...user } = data;
       localStorage.setItem("access_token", token);
       localStorage.setItem("user_info", JSON.stringify(user));
+      localStorage.setItem("isVerified", "true");
 
-      if (onLoginSuccess) {
-        onLoginSuccess(user);
-      }
+      // Show success message and redirect to home
+      setError(null);
+      setTimeout(() => {
+        navigate("/home");
+      }, 1000);
     } catch (err) {
       console.error("Login Error:", err);
       setError(err.message || "An unexpected error occurred during login.");
@@ -86,7 +90,10 @@ const LoginForm = ({ onLoginSuccess, onToggleForm, onNavigate }) => {
       </button>
 
       {/* CRITICAL CHANGE: Attach navigation handler to go to the reset screen */}
-      <p className={styles.forgotPassword} onClick={() => onNavigate("reset")}>
+      <p
+        className={styles.forgotPassword}
+        onClick={() => navigate("/forgot-password")}
+      >
         Forgot Password?
       </p>
     </form>
