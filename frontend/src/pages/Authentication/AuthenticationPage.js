@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useLocation } from "react-router-dom";
 import styles from "./styles/AuthenticationPage.module.css";
 import Navbar from "../LandingPage/components/Navbar";
 import AuthPanel from "./components/AuthPanel";
@@ -6,7 +7,10 @@ import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
 
 const AuthenticationPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const location = useLocation();
+  const [isLogin, setIsLogin] = useState(
+    location.state?.initialView === "signup" ? false : true
+  );
 
   const toggleForm = () => {
     setIsLogin((prev) => !prev);

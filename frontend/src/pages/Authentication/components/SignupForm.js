@@ -143,6 +143,10 @@ const SignupForm = ({ onToggleForm }) => {
       <button type="submit" className={styles.submitBtn} disabled={loading}>
         {loading ? "Registering..." : "Sign Up"}
       </button>
+
+      <p className={styles.toggleForm}>
+        Already have an account? <span onClick={onToggleForm}>Login</span>
+      </p>
     </form>
   );
 };

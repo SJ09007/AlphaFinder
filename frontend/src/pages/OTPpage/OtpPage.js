@@ -14,7 +14,7 @@ const OtpPage = () => {
   useEffect(() => {
     // If no email is provided, redirect to signup
     if (!userEmail) {
-      navigate("/signup");
+      navigate("/auth");
     }
   }, [userEmail, navigate]);
   const [loading, setLoading] = useState(false);
@@ -84,19 +84,22 @@ const OtpPage = () => {
       const result = await response.json();
 
       if (result.success) {
-        setStatus(
-          "OTP verified successfully! Redirecting to homepage...",
-          false
-        );
+        setStatus("OTP verified successfully! Redirecting to login...", false);
         setOtp(""); // Clear OTP input
 
-        // Set authentication state
+        // Mark account as verified and store email
         localStorage.setItem("isVerified", "true");
         localStorage.setItem("user_email", userEmail);
 
-        // Small delay to show the success message before redirecting
+        // Navigate to login with verification success message
         setTimeout(() => {
-          navigate("/home");
+          navigate("/auth", {
+            state: {
+              email: userEmail,
+              verified: true,
+              initialView: "login", // Ensure we show login form
+            },
+          });
         }, 1500);
       } else {
         setStatus(result.message || "Verification failed", true);

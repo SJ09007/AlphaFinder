@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -23,19 +23,15 @@ function App() {
   //return <ForgotPasswordPage onNavigate={() => {}} />; // 4. Test Forgot Password Page
   //return <HomePage onLogout={() => {}} />; // 5. Test Home Page (requires mock token in localStorage)
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
+  // read token on render so navigation to /home after login works
+  const token = localStorage.getItem("access_token");
 
   const handleLogout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("user_info");
-    setIsAuthenticated(false);
+    // force a re-render by navigating (HomePage can call this prop)
+    // Redirect to the landing page after logout
+    window.location.href = "/";
   };
 
   return (
@@ -48,11 +44,7 @@ function App() {
         <Route
           path="/home"
           element={
-            isAuthenticated ? (
-              <HomePage onLogout={handleLogout} />
-            ) : (
-              <Navigate to="/auth" replace />
-            )
+            token ? <HomePage onLogout={handleLogout} /> : <Navigate to="/auth" replace />
           }
         />
         <Route path="*" element={<Navigate to="/" replace />} />

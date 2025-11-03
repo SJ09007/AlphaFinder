@@ -14,10 +14,18 @@ const Navbar = () => {
         <li>Contact</li>
       </ul>
       <div className={styles.authButtons}>
-        <button className={styles.login} onClick={() => navigate("/auth")}>
+        <button
+          className={styles.login}
+          onClick={() => navigate("/auth", { state: { initialView: "login" } })}
+        >
           Login
         </button>
-        <button className={styles.signup} onClick={() => navigate("/auth")}>
+        <button
+          className={styles.signup}
+          onClick={() =>
+            navigate("/auth", { state: { initialView: "signup" } })
+          }
+        >
           Sign Up
         </button>
       </div>

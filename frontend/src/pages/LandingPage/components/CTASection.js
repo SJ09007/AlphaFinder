@@ -11,7 +11,7 @@ const CTASection = () => {
       <p>Join thousands of students using our platform to recover lost items</p>
       <button
         className={styles.createAccount}
-        onClick={() => navigate("/auth")}
+        onClick={() => navigate("/auth", { state: { initialView: "signup" } })}
       >
         Create Account
       </button>
