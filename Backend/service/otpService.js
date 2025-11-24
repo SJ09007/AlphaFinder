@@ -28,7 +28,29 @@ const sendOtp = async(userId) => {
 
   await client.setEx(throttleKey, 60, String(1));
 
-await sendEmail("No Reply@Alphafinder.com", userId, "OTP For Verification", "otp is " + otp);
+const emailSubject = "Verify Your CampusFindIt Account";
+        const emailMessage = `Welcome to CampusFindIt.
+
+Your verification code: ${otp}
+
+This code expires in 10 minutes.
+
+To verify your account:
+1. Return to the verification page
+2. Enter the code above
+3. Click Verify
+
+Security notes:
+- Do not share this code with anyone
+- You have 5 attempts to enter the correct code
+- If you didn't request this, ignore this email
+
+Need help? Contact support@campusfindit.com
+
+Best regards,
+CampusFindIt Team`;
+
+        await sendEmail("CampusFindIt <noreply@campusfindit.com>", userId, emailSubject, emailMessage);
   return { success: true, message: "OTP sent successfully" };
     } catch (err) {
         console.log(err);

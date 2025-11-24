@@ -7,14 +7,22 @@ const userRoute = require("./routes/userRoute");
 const otpRoute = require("./routes/otpVerificationRoute");
 const itemRoute = require("./routes/itemsRoute");
 const claimRoute = require("./routes/claimsRoute");
+const notificationRoute = require("./routes/notificationRoute");
 
 const cookieParser = require("cookie-parser");
-const {connectRedis}  = require("./config/redisconn");
+const { connectRedis } = require("./config/redisconn");
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+//app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+
 app.use(cookieParser());
 
 app.use(express.json());
@@ -24,18 +32,18 @@ app.use("/api/users", userRoute);
 app.use("/api/otp", otpRoute);
 app.use("/api/items", itemRoute);
 app.use("/api/claims", claimRoute);
+app.use("/api/notifications", notificationRoute);
 
-connectDB().then(() => {
+connectDB()
+  .then(() => {
     console.log("Connected to MongoDB");
     connectRedis().then(() => {
-        console.log("Connected to Redis");
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
+      console.log("Connected to Redis");
+      app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+      });
     });
-    })
-    
-}).catch((err) => {
+  })
+  .catch((err) => {
     console.log(err);
-})
-
-
+  });

@@ -1,255 +1,171 @@
-import React, { useState, useEffect } from "react";
+// src/pages/HomePage/HomePage.js
+import React, { useEffect, useState } from "react";
 import styles from "./styles/HomePage.module.css";
-import Navbar from "./components/HomeNavbar";
-import ReportItemForm from "./components/ReportItemForm";
+import HomeNavbar from "./components/HomeNavbar";
 import ItemDetailModal from "./components/ItemDetailModal";
+import ItemCard from "../../components/ItemCard";
 
-// Component to represent an item card (now clickable)
-const ItemCard = ({ item, onClick }) => {
-  const formattedDate = new Date(item.date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL || "http://localhost:3100/api";
 
-  return (
-    <div
-      className={styles.card}
-      onClick={() => onClick(item)}
-      style={{
-        background: item.status === "lost" ? "#fff5f5" : "#f5fff5",
-        borderLeft:
-          item.status === "lost" ? "4px solid #e53e3e" : "4px solid #38a169",
-      }}
-    >
-      <h3 className={styles.cardTitle}>{item.title}</h3>
-      <p className={styles.cardDescription}>
-        {item.description.substring(0, 120)}
-        {item.description.length > 120 ? "..." : ""}
-      </p>
-      <div>
-        <span
-          style={{
-            padding: "4px 8px",
-            borderRadius: "4px",
-            fontSize: "0.8rem",
-            backgroundColor: item.status === "lost" ? "#fed7d7" : "#c6f6d5",
-            color: item.status === "lost" ? "#e53e3e" : "#38a169",
-            fontWeight: "500",
-          }}
-        >
-          {item.category}
-        </span>
-      </div>
-      <div className={styles.cardMeta}>
-        <div className={styles.cardLocation}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-            <circle cx="12" cy="10" r="3"></circle>
-          </svg>
-          {item.location}
-        </div>
-        <div className={styles.cardDate}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
-          {formattedDate}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Component now accepts the onLogout prop from App.js
 const HomePage = ({ onLogout }) => {
-  // State for internal page view: 'list' (default) or 'report' (form)
-  const [currentView, setCurrentView] = useState("list");
+  // Read URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialFilter = urlParams.get("filter") || "all";
+
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [refreshTrigger, setRefreshTrigger] = useState(0); // Add refresh trigger
-
-  // State for modal: holds the item object to display in the modal
   const [selectedItem, setSelectedItem] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [filter, setFilter] = useState(initialFilter); // 'all', 'lost', 'found'
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showAllFound, setShowAllFound] = useState(false);
+  const [showAllLost, setShowAllLost] = useState(false);
 
-  // Filtered lists
-  const lostItems = items.filter((item) => item.status === "lost");
-  const foundItems = items.filter((item) => item.status === "found");
-
-  // --- Modal Handlers ---
-  const openModal = (item) => {
-    setSelectedItem(item);
-  };
-
-  const closeModal = () => {
-    setSelectedItem(null);
-  };
-
-  // This function is called when a claim is successfully submitted in the modal
-  const handleClaimSuccess = () => {
-    // Close the modal and refresh the list to potentially show updated item status
-    closeModal();
-    fetchItems();
-  };
-
-  // --- API Call to Fetch Items ---
   const fetchItems = async () => {
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      setError("Authentication required. Please log in.");
-      setLoading(false);
-      return;
-    }
-
+    setLoading(true);
+    setError("");
     try {
-      setLoading(true);
-      setError(null);
-
-      const response = await fetch("http://localhost:3100/api/items/getall", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+      const res = await fetch(`${API_BASE_URL}/items/getall`, {
+        credentials: "include", // not required for public but safe & consistent
       });
-
-      if (!response.ok) {
-        let errorData = await response.json();
-        throw new Error(
-          errorData.error || errorData.message || "Failed to fetch items."
-        );
-      }
-
-      const data = await response.json();
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.message || "Failed to fetch items");
       setItems(data);
     } catch (err) {
-      console.error("Fetch Items Error:", err);
-      setError(err.message || "Could not load items.");
+      console.error("fetchItems error:", err);
+      setError(err.message || "Network error");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    // Fetch items when view changes to list or when refreshTrigger changes
-    if (currentView === "list") {
-      fetchItems();
-    }
-  }, [currentView, refreshTrigger]);
+    fetchItems();
+  }, []);
 
-  // --- Render Functions ---
+  // Filter items by search query
+  const filteredItems = items.filter((item) => {
+    const matchesSearch = 
+      item.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.category?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
+  });
 
-  const renderItemGrid = (data, title) => (
-    <section className={styles.section}>
-      <h3>
-        {title} ({data.length})
-      </h3>
-      {data.length === 0 ? (
-        <p>
-          No items currently listed as{" "}
-          {title.toLowerCase().replace(" items", "")}.
-        </p>
-      ) : (
-        <div className={styles.grid}>
-          {data.slice(0, 4).map(
-            (
-              item // Show only the first 4 for 'Recently'
-            ) => (
-              // Pass the openModal function to make the card clickable
-              <ItemCard key={item._id} item={item} onClick={openModal} />
-            )
-          )}
-        </div>
-      )}
-      <button
-        onClick={() => {
-          /* TODO: Implement view more */
-        }}
-        className={styles.viewMore}
-      >
-        view more
-      </button>
-    </section>
-  );
+  const lostItems = filteredItems.filter((i) => i.status === "lost");
+  const foundItems = filteredItems.filter((i) => i.status === "found");
 
-  const renderListView = () => (
-    <>
-      {/* Search bar */}
-      <div className={styles.searchContainer}>
-        <input
-          type="text"
-          placeholder="Search for your lost item..."
-          className={styles.searchInput}
-        />
-        <button className={styles.filterButton}>☰</button>
-      </div>
+  // Limit to 2 rows (assuming 4 items per row on average)
+  const ITEMS_PER_ROW = 4;
+  const MAX_ROWS = 2;
+  const MAX_ITEMS = ITEMS_PER_ROW * MAX_ROWS;
 
-      {loading && (
-        <p style={{ textAlign: "center", margin: "30px" }}>Loading items...</p>
-      )}
-      {error && (
-        <p style={{ textAlign: "center", margin: "30px", color: "red" }}>
-          Error: {error}
-        </p>
-      )}
+  const displayedFoundItems = showAllFound ? foundItems : foundItems.slice(0, MAX_ITEMS);
+  const displayedLostItems = showAllLost ? lostItems : lostItems.slice(0, MAX_ITEMS);
 
-      {!loading && !error && (
-        <>
-          {/* Recently Lost Items */}
-          {renderItemGrid(lostItems, "Recently Lost Items")}
+  const openModal = (item) => setSelectedItem(item);
+  const closeModal = () => setSelectedItem(null);
 
-          {/* Recently Found Items */}
-          {renderItemGrid(foundItems, "Recently Found Items")}
-        </>
-      )}
-    </>
-  );
+  const handleClaimSuccess = () => {
+    closeModal();
+    fetchItems();
+  };
 
-  // --- Main Component Render ---
+  const handleFilterChange = (filterType) => {
+    console.log(`Filter changed to: ${filterType}`);
+    setFilter(filterType);
+  };
+
   return (
     <div className={styles.pageContainer}>
-      {/* 🎯 CRITICAL CHANGE: Pass the onLogout prop to the Navbar */}
-      <Navbar onNavigate={setCurrentView} onLogout={onLogout} />
+      <HomeNavbar 
+        onLogout={onLogout}
+        onFilterChange={handleFilterChange}
+        currentFilter={filter}
+      />
 
-      {/* Conditional Rendering based on view state */}
-      {currentView === "list" && renderListView()}
+      <>
+          <div className={styles.header}>
+            <h1 className={styles.title}>Campus Lost & Found</h1>
+            <div className={styles.searchContainer}>
+              <span className={styles.searchIcon}>🔍</span>
+              <input
+                type="text"
+                placeholder="Search item"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={styles.searchInput}
+              />
+              {searchQuery && (
+                <button
+                  className={styles.clearBtn}
+                  onClick={() => setSearchQuery("")}
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          </div>
 
-      {currentView === "report" && (
-        <div className={styles.section}>
-          <ReportItemForm
-            onSuccess={() => {
-              setCurrentView("list");
-              setRefreshTrigger((prev) => prev + 1); // Trigger refresh
-            }}
-          />
-        </div>
-      )}
+          {loading && (
+            <p className={styles.loadingText}>Loading items, please wait...</p>
+          )}
+          {error && <p className={styles.errorText}>Error: {error}</p>}
 
-      {/* Conditional Modal Rendering */}
+          {!loading && !error && (
+            <>
+              {(filter === "all" || filter === "found") && (
+                <section className={styles.section}>
+                  <h2 className={styles.sectionTitle}>Found Items</h2>
+                  <div className={styles.grid}>
+                    {foundItems.length === 0 && (
+                      <p className={styles.emptyText}>No found items yet.</p>
+                    )}
+                    {displayedFoundItems.map((item) => (
+                      <ItemCard key={item._id} item={item} onClick={openModal} />
+                    ))}
+                  </div>
+                  {foundItems.length > MAX_ITEMS && (
+                    <div className={styles.viewAllContainer}>
+                      <button
+                        className={styles.viewAllBtn}
+                        onClick={() => setShowAllFound(!showAllFound)}
+                      >
+                        {showAllFound ? "Show Less" : `View All (${foundItems.length})`}
+                      </button>
+                    </div>
+                  )}
+                </section>
+              )}
+
+              {(filter === "all" || filter === "lost") && (
+                <section className={styles.section}>
+                  <h2 className={styles.sectionTitle}>Lost Items</h2>
+                  <div className={styles.grid}>
+                    {lostItems.length === 0 && (
+                      <p className={styles.emptyText}>No lost items yet.</p>
+                    )}
+                    {displayedLostItems.map((item) => (
+                      <ItemCard key={item._id} item={item} onClick={openModal} />
+                    ))}
+                  </div>
+                  {lostItems.length > MAX_ITEMS && (
+                    <div className={styles.viewAllContainer}>
+                      <button
+                        className={styles.viewAllBtn}
+                        onClick={() => setShowAllLost(!showAllLost)}
+                      >
+                        {showAllLost ? "Show Less" : `View All (${lostItems.length})`}
+                      </button>
+                    </div>
+                  )}
+                </section>
+              )}
+            </>
+          )}
+      </>
+
       {selectedItem && (
         <ItemDetailModal
           item={selectedItem}

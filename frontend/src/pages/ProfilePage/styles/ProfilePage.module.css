@@ -1,0 +1,761 @@
+.profileContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  background: linear-gradient(135deg, #f5f7fb 0%, #e8eef7 100%);
+  min-height: 100vh;
+}
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  color: #1e3a8a;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.tabs {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.activeTab {
+  font-weight: bold;
+  border-bottom: 2px solid #3182ce;
+}
+.tabContent {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 18px;
+}
+.itemCard {
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  margin-bottom: 16px;
+  padding: 12px 16px;
+}
+.deleteBtn {
+  background: #e53e3e;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+.approveBtn {
+  background: #38a169;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  margin-top: 8px;
+  cursor: pointer;
+}
+.requestsSection {
+  margin-top: 10px;
+  background: #f1f5f9;
+  border-radius: 6px;
+  padding: 10px;
+}
+.requestCard {
+  margin-bottom: 8px;
+  padding: 6px;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.profileDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  max-width: 600px;
+  margin: 0 auto;
+}
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 25px rgba(30, 58, 138, 0.3);
+  border: 4px solid white;
+}
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.fieldGroup label {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+.fieldGroup input {
+  padding: 12px 16px;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+.fieldGroup input:disabled {
+  background: #f7fafc;
+  color: #4a5568;
+  cursor: not-allowed;
+}
+.buttonGroup {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+.editBtn {
+  background: #3182ce;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+.saveBtn {
+  background: #38a169;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.subNavbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 30px;
+  background: white;
+  padding: 8px;
+  border-radius: 50px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.subNavbar button {
+  background: transparent;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  cursor: pointer;
+  color: #4a5568;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  position: relative;
+}
+
+.subNavbar button:hover {
+  color: #1e3a8a;
+  background: rgba(30, 58, 138, 0.05);
+}
+
+.subNavbar button.activeTab {
+  color: white;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
+}
+
+.postsSection {
+  padding: 16px 0;
+}
+
+.postsSection h2 {
+  font-size: 1.5rem;
+  margin-bottom: 24px;
+  color: #1e3a8a !important;
+  font-weight: 700;
+  text-shadow: none !important;
+}
+
+.noItems {
+  text-align: center;
+  color: #718096;
+  padding: 48px 0;
+  font-size: 1.1rem;
+}
+
+.postsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.postCard {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.postCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #1e3a8a 0%, #1e40af 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.postCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.postCard:hover::before {
+  opacity: 1;
+}
+
+.postImage {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: #e2e8f0;
+  flex-shrink: 0;
+}
+
+.postImagePlaceholder {
+  width: 100%;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  padding: 20px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.placeholderTitle {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  word-wrap: break-word;
+  margin: 0;
+}
+
+.postContent {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.postInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.postTitle {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 6px 0;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.statusBadge.lost {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.statusBadge.found {
+  background: #c6f6d5;
+  color: #2f855a;
+}
+
+.statusBadge.claimed {
+  background: #bee3f8;
+  color: #2c5282;
+}
+
+.statusBadge.reported {
+  background: #feebc8;
+  color: #c05621;
+}
+
+.postCategory {
+  font-size: 0.8rem;
+  color: #718096;
+  margin: 2px 0 6px 0;
+  font-weight: 500;
+}
+
+.descriptionWrapper {
+  margin: 6px 0 8px 0;
+  flex: 1;
+}
+
+.postDescription {
+  font-size: 0.85rem;
+  color: #4a5568;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+
+.postDescriptionExpanded {
+  font-size: 0.85rem;
+  color: #4a5568;
+  line-height: 1.4;
+  margin: 0;
+}
+
+.readMoreBtn {
+  background: none;
+  border: none;
+  color: #3182ce;
+  font-size: 0.8rem;
+  cursor: pointer;
+  padding: 2px 0;
+  margin-top: 2px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.readMoreBtn:hover {
+  color: #2c5282;
+  text-decoration: underline;
+}
+
+.postLocation {
+  font-size: 0.8rem;
+  color: #718096;
+  margin: 6px 0 2px 0;
+}
+
+.postDate {
+  font-size: 0.8rem;
+  color: #a0aec0;
+  margin: 2px 0 0 0;
+}
+
+.deleteBtn {
+  width: 100%;
+  background: #e53e3e;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 0;
+}
+
+.deleteBtn:hover {
+  background: #c53030;
+}
+
+.notificationBadge {
+  display: inline-block;
+  background: #e53e3e;
+  color: white;
+  border-radius: 10px;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  margin-left: 8px;
+  font-weight: 700;
+}
+
+.notificationsSection {
+  padding: 16px 0;
+}
+
+.notificationsSection h2 {
+  font-size: 1.5rem;
+  margin-bottom: 24px;
+  color: #1e3a8a !important;
+  font-weight: 700;
+  text-shadow: none !important;
+}
+
+.notificationsList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notificationCard {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.notificationCard:hover {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  transform: translateY(-3px);
+  border-color: #e2e8f0;
+}
+
+.notificationCard.unread {
+  background: linear-gradient(135deg, #f7fafc 0%, #ebf8ff 100%);
+  border-left: 4px solid #1e40af;
+  box-shadow: 0 4px 15px rgba(30, 64, 175, 0.15);
+}
+
+.notificationIcon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.notificationContent {
+  flex: 1;
+}
+
+.notificationMessage {
+  font-size: 1rem;
+  color: #2d3748;
+  margin: 0 0 8px 0;
+  line-height: 1.5;
+}
+
+.notificationTime {
+  font-size: 0.85rem;
+  color: #718096;
+}
+
+.unreadDot {
+  width: 10px;
+  height: 10px;
+  background: #3182ce;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Claims Management Styles */
+.claimsSection {
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+.viewClaimsBtn {
+  width: 100%;
+  background: linear-gradient(135deg, #ebf8ff 0%, #dbeafe 100%);
+  color: #1e40af;
+  border: 2px solid #93c5fd;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 2px 8px rgba(30, 64, 175, 0.1);
+  margin-bottom: 8px;
+}
+
+.viewClaimsBtn:hover {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-color: #60a5fa;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
+}
+
+.claimsList {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.noClaims {
+  text-align: center;
+  color: #718096;
+  padding: 16px;
+  font-size: 0.9rem;
+}
+
+.claimCard {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.claimHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.claimerName {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.9rem;
+}
+
+.claimStatus {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.claimStatus.pending {
+  background: #feebc8;
+  color: #c05621;
+}
+
+.claimStatus.approved {
+  background: #c6f6d5;
+  color: #2f855a;
+}
+
+.claimStatus.rejected {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.claimDetails {
+  font-size: 0.85rem;
+  color: #4a5568;
+  line-height: 1.6;
+}
+
+.claimDetails p {
+  margin: 6px 0;
+}
+
+.claimDetails strong {
+  color: #2d3748;
+}
+
+.claimTime {
+  font-size: 0.75rem;
+  color: #a0aec0;
+  margin-top: 8px;
+}
+
+.claimActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.approveBtn {
+  flex: 1;
+  background: #38a169;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.approveBtn:hover {
+  background: #2f855a;
+}
+
+.rejectBtn {
+  flex: 1;
+  background: #e53e3e;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.rejectBtn:hover {
+  background: #c53030;
+}
+
+.contactInfo {
+  margin-top: 12px;
+  padding: 12px;
+  background: #c6f6d5;
+  border-radius: 6px;
+  border: 1px solid #9ae6b4;
+}
+
+.contactInfo h4 {
+  margin: 0 0 8px 0;
+  color: #2f855a;
+  font-size: 0.9rem;
+}
+
+.contactInfo p {
+  margin: 4px 0;
+  font-size: 0.85rem;
+  color: #22543d;
+}
+
+.contactInfo strong {
+  font-weight: 600;
+}
+
+/* My Claims Tab Styles */
+.claimsTabSection {
+  padding: 16px 0;
+}
+
+.claimsTabSection h2 {
+  font-size: 1.5rem;
+  margin-bottom: 24px;
+  color: #1e3a8a !important;
+  font-weight: 700;
+  text-shadow: none !important;
+}
+
+.myClaimsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.myClaimCard {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.myClaimCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.myClaimHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #f7fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.myClaimTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0;
+  flex: 1;
+}
+
+.myClaimImage {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: #e2e8f0;
+}
+
+.myClaimDetails {
+  padding: 16px;
+  font-size: 0.9rem;
+  color: #4a5568;
+  line-height: 1.6;
+}
+
+.myClaimDetails p {
+  margin: 8px 0;
+}
+
+.myClaimDetails strong {
+  color: #2d3748;
+}
+
+.ownerContactInfo {
+  margin: 16px;
+  padding: 16px;
+  background: #c6f6d5;
+  border-radius: 8px;
+  border: 2px solid #9ae6b4;
+}
+
+.ownerContactInfo h4 {
+  margin: 0 0 12px 0;
+  color: #2f855a;
+  font-size: 1rem;
+}
+
+.ownerContactInfo p {
+  margin: 6px 0;
+  font-size: 0.9rem;
+  color: #22543d;
+}
+
+.ownerContactInfo strong {
+  font-weight: 600;
+}
+
+.pendingNote {
+  margin: 16px;
+  padding: 12px;
+  background: #feebc8;
+  color: #c05621;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.rejectedNote {
+  margin: 16px;
+  padding: 12px;
+  background: #fed7d7;
+  color: #c53030;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+}

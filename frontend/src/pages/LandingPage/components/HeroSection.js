@@ -29,7 +29,11 @@ const HeroSection = () => {
         </div>
       </div>
       <div className={styles.illustration}>
-        Campus Lost & Found Illustration
+        <img 
+          src="/LPi04.jpg" 
+          alt="Campus Lost & Found Illustration"
+          className={styles.illustrationImage}
+        />
       </div>
     </section>
   );
